@@ -1,0 +1,31 @@
+{
+  "name": "narratus-processor",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "./node_modules/.bin/coffee index.coffee"
+  },
+  "author": "",
+  "license": "BSD",
+  "dependencies": {
+    "coffee-script": "~1.6.3",
+    "epipebomb": "~0.1.1",
+    "flat": "~1.0.0",
+    "graceful-fs": "~2.0.1",
+    "underscore": "1.5.2",
+    "hiredis": "^0.1.16",
+    "base64": "^2.1.0",
+    "geoip-lite": "^1.1.3",
+    "request": "^2.34.0",
+    "redis": "^0.12.1",
+    "forgetsy-js": "~0.10.6",
+    "npid": "^0.4.0"
+  },
+  "devDependencies": {
+    "mocha": "~1.9.0",
+    "sinon-chai": "~2.3.1",
+    "chai": "~1.5.0",
+    "sinon": "~1.6.0"
+  }
+}
