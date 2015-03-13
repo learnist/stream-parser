@@ -3,34 +3,33 @@ fs   = require('graceful-fs');
 lib  = path.join(path.dirname(fs.realpathSync(__filename)), './../lib');
 Event = require(lib + "/event")
 BotDetector = require(lib + "/bot_detector")
-MemberDetector = require(lib + "/member_detector")
 extend = require('util')._extend
 Base64 = require('base64')
 geoip = require('geoip-lite')
 
 module.exports = class Entry
   constructor: (@json) ->
-    @data = @json.payload
-    @cookies = @cookies()
-    @guid = @cookies?.guid
-    @controller = @data?.controller
-    @action = @data?.action
-    @params = @data?.params
-    @sessionId = @cookies?._learnist_session_ff1
-    @deviceId = @params?.device_token
-    @responseCode = @data?.response?.status
-    @eventName = new Event(@json).eventName()
-    @id = @getId()
-    @botDetector = new BotDetector(@json)
-    # @isMember = new MemberDetector(@guid).isMember()
-    @referrer = @data?.headers?.HTTP_NARRATUS_REFERER || @data?.headers?.HTTP_REFERER
-    @referer = @referrer
-    @userAgent = @data?.headers?.HTTP_NARRATUS_USER_AGENT || @data?.headers?.HTTP_USER_AGENT
-    @ip = @data?.headers?.HTTP_NARRATUS_X_REAL_IP || @data?.client_ip
-    @path = @data?.path
-    @narratus_version = @json.service
-    @xForwardedFor = @data?.headers?.HTTP_NARRATUS_X_FORWARDED_FOR || @data?.headers?.HTTP_X_FORWARDED_FOR
-
+    @data = @json
+    @params = @data.params
+    @userGuid = @data?.user_guid
+    @listId = @params?.list_id
+  
+  eventName: ->
+    "#{@data?.controller}:#{@data?.action}" # stupid simplified for ex.
+  
+  eventData: ->
+    if @data.action == 'create' && @data.controller == "tasks"
+      out = 
+        name: @params?.task?.name
+        listId: @params?.task?.list_id
+        done: @params?.task?.done
+        
+    else if @data.action == 'create' && @data.controller == "lists"
+      out = 
+        name: @params?.list?.name
+      
+    return out
+    
   timestamp: ->
     Number(@json?.timestamp || @json.notification?.start)*1000
 

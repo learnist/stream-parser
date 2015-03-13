@@ -8,20 +8,14 @@ filter = require(lib + "/stream_filter")
 Entry = require(lib + "/entry")
 
 filterInvalidEntries = (entry) ->
-  entry.guid && !entry.isRobot()
+  entry.userGuid# && !entry.isRobot()
 
 entryCreator = formatter((json) -> new Entry(json))
 
 dashboardFormatter = (entry) ->
-  json = entry.json
-
-  guid: entry.guid
-  event: entry.eventName
-  resource_id: entry.id
-  ts: entry.timestamp()
-  referer: entry.referer
-  path: entry.path
-  geo: entry.geo()
+  userGuid: entry.userGuid
+  eventName: entry.eventName()
+  eventData: entry.eventData()
 
 module.exports = (inputStream) ->
   inputStream
